@@ -7,6 +7,6 @@
   "iot_class": "cloud_polling",
   "name": "Helium Integration",
   "requirements": ["requests>=2.26.0"],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "issue_tracker": "https://github.com/enes-oerdek/Home-Assistant-Helium-Integration/issues"
 }

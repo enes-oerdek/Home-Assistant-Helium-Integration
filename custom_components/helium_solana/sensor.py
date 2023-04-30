@@ -45,7 +45,6 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     }
 )
 
-
 def http_client(url, payload=None, method='GET', headers=None):
     # Make the HTTP request with the given URL, payload, method, and headers
     response = requests.request(method, url, json=payload, headers=headers)
@@ -55,7 +54,6 @@ def http_client(url, payload=None, method='GET', headers=None):
 
     # Return the response
     return response
-
 
 async def async_setup_platform(
     hass: HomeAssistantType,
@@ -136,7 +134,12 @@ class PriceSensor(Entity):
                 return
             
             json = response.json()
-            self._state = float(json['data'][self.address]['price'])
+            price_data = json['data'][self.address]
+            self._state = float(price_data['price'])
+            self.attributes['id'] = price_data['id']
+            self.attributes['mintSymbol'] = price_data['mintSymbol']
+            self.attributes['vsToken'] = price_data['vsToken']
+            self.attributes['vsTokenSymbol'] = price_data['vsTokenSymbol']
             self._available = True
 
         except (requests.exceptions.RequestException):
