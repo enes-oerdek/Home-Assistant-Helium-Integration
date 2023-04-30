@@ -8,7 +8,7 @@ By embracing not only the HNT state but also the subDAOs IOT and MOBILE, the int
 
 Join us on this exciting journey as we redefine the way you interact with Home Assistant and Helium, and let's create a more connected and decentralized future together! :sparkles:
 
-## Roadmap :road: 
+## Roadmap :rocket: 
 
 - [x] **Price of HNT, IOT, and MOBILE** - Stay informed with real-time price updates for HNT, IOT, and MOBILE tokens, empowering you to make smarter decisions and optimize your smart home experience! :moneybag:
 - [ ] **General Helium Stats** - Get a comprehensive overview of the Helium network with key performance metrics and insights, ensuring you always have your finger on the pulse of this dynamic ecosystem! :mag:
