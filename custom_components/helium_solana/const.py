@@ -1,4 +1,4 @@
-DOMAIN = "helium-solana-integration"
+DOMAIN = "helium_solana"
 
 CONF_WALLET = 'wallet'
 CONF_HOTSPOT = 'hotspot'

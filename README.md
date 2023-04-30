@@ -16,6 +16,7 @@ Join us on this exciting journey as we redefine the way you interact with Home A
 - [ ] **Hotspot Stats and Rewards** - Monitor your Helium hotspot performance, including detailed reward breakdowns, so you can maximize your earnings and contribute to a robust decentralized network! :satellite:
 - [ ] **Staking Stats** - Stay up to date with your staking positions, providing you with valuable information to help you navigate the exciting world of Helium staking! :lock:
 - [ ] **Staking Rewards** - Keep tabs on your staking rewards, enabling you to make the most of your investments and celebrate your wins in the Helium ecosystem! :tada:
+- [ ] **Blueprints for easy automation** - [Blueprints](https://www.home-assistant.io/docs/blueprint/tutorial/) allow rapid configuration of automations without diving too much into code. 
 
 ## Installation :hammer_and_wrench:
 
@@ -46,7 +47,7 @@ Get ready to unlock the full potential of Helium integration in your Home Assist
 
 ```yaml
 sensor:
-  - platform: helium-solana-integration
+  - platform: helium_solana
 ```
 
 This one-liner will introduce new sensors for the prices of HNT, IOT, MOBILE, and SOL, providing you with valuable insights right at your fingertips! :gem:
