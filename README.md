@@ -94,6 +94,26 @@ show:
 type: custom:mini-graph-card
 ```
 
-## Contributing
+## Contributing :handshake:
 
-Feel free to contribute by submitting issues or pull-requests.
+We warmly welcome contributions from the community! Whether you have a brilliant idea, a bug report, or simply want to lend a helping hand, your input is greatly appreciated. :star:
+
+To get started, you can:
+
+1. **Submit an issue** - Found a bug or have a feature request? Open a new issue on our GitHub repository and let us know.
+2. **Create a pull request** - Have a fix or improvement you'd like to contribute? Fork the repo, make your changes, and submit a pull request for review.
+
+Together, we can make this project even better! :muscle:
+
+
+## Acknowledgements :raised_hands:
+
+A big thank you to the following contributors for their invaluable resources and support that helped make this project possible:
+
+1. [Aaron Godfrey](https://aarongodfrey.dev/home%20automation/building_a_home_assistant_custom_component_part_1/) - For providing a comprehensive guide on creating a HACS integration.
+
+2. [lthiery](https://github.com/lthiery/hnt-explorer) - For providing the new hnt-explorer which makes consuming staking data easier.
+
+3. [rsnodgrass' hass-helium](https://github.com/rsnodgrass/hass-helium) - Before creating a new integration, I used rsnodgrass' plugin. Unfortunately it does not seem to get updated. 
+
+Stay tuned for more acknowledgements as our project evolves and grows! :rocket:
