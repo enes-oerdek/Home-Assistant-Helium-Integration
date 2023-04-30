@@ -61,7 +61,7 @@ This will introduce new sensors with the prices of HNT, IOT, MOBILE and SOL. You
 
 ## Examples :rainbow:
 
-Discover the amazing possibilities of Helium integration in your Home Assistant through these inspiring examples! :star:
+Discover the amazing possibilities of Helium integration in your Home Assistant through these inspiring examples! :star: 
 
 ### Price Monitoring :bar_chart:
 
