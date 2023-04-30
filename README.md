@@ -1,5 +1,5 @@
 # Helium Integration for Home Assistant
-
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 ## Introduction
 
 Welcome to the future of Home Assistant integration with Helium! :tada: This project is designed to bring the power and versatility of Helium to your smart home, revolutionizing the way you interact with your connected devices. Inspired by [rsnodgrass' hass-helium](https://github.com/rsnodgrass/hass-helium) project, we've taken a fresh approach, building a comprehensive integration from the ground up to support the latest post-migration features of Helium. :rocket:
