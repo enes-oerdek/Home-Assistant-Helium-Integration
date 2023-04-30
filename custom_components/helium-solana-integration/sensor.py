@@ -1,6 +1,6 @@
 """Helium Solana Integration"""
 
-import request
+import requests
 import voluptuous as vol
 
 import logging
