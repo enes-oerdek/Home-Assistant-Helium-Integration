@@ -1,5 +1,5 @@
 """Helium Solana Integration"""
-
+import asyncio
 import requests
 import voluptuous as vol
 
@@ -29,7 +29,8 @@ from .const import (
     ADDRESS_MOBILE,
     ADDRESS_HNT,
     ADDRESS_SOLANA,
-    JUPITER_PRICE_URL
+    JUPITER_PRICE_URL,
+    CURRENCY_USD
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -38,8 +39,8 @@ SCAN_INTERVAL = timedelta(minutes=10)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
-        #vol.Optional(CONF_WALLET): [cv.string],
-        #vol.Optional(CONF_HOTSPOT): [cv.string],
+        vol.Optional(CONF_WALLET): [cv.string],
+        vol.Optional(CONF_HOTSPOT): [cv.string],
         vol.Optional(CONF_PRICES): [cv.string],
     }
 )
@@ -63,23 +64,23 @@ async def async_setup_platform(
     discovery_info: Optional[DiscoveryInfoType] = None,
 ) -> None:
     """Set up the sensor platform."""
-    #session = async_get_clientsession(hass)
-    #github = GitHubAPI(session, "requester", oauth_token=config[CONF_ACCESS_TOKEN])
-    #wallets = config.get(CONF_WALLET)
-    #hotspots = config.get(CONF_HOTSPOT)
+
+    sensors = []
+    sensors.append(PriceSensor(ADDRESS_IOT, 'IOT'))
+    sensors.append(PriceSensor(ADDRESS_MOBILE, 'MOBILE'))
+    sensors.append(PriceSensor(ADDRESS_HNT, 'HNT'))
+    sensors.append(PriceSensor(ADDRESS_SOLANA, 'SOLANA'))
+
     prices = config.get(CONF_PRICES)
 
-    prices.append(PriceSensor(ADDRESS_IOT, JUPITER_PRICE_URL, 'IOT'))
-    prices.append(PriceSensor(ADDRESS_MOBILE, JUPITER_PRICE_URL, 'MOBILE'))
-    prices.append(PriceSensor(ADDRESS_HNT, JUPITER_PRICE_URL, 'HNT'))
-    prices.append(PriceSensor(ADDRESS_SOLANA, JUPITER_PRICE_URL, 'SOLANA'))
-
-    for price in prices:
-        sensors.append(PriceSensor(price))
+    if prices:
+        for price in prices:
+            sensors.append(PriceSensor(price))
 
     async_add_entities(sensors, update_before_add=True)
 
-class PriceSensor(Entitiy):
+class PriceSensor(Entity):
+    """Price Sensor for Solana tokens"""
 
     def __init__(self, address, name = ""):
         super().__init__()
@@ -87,7 +88,7 @@ class PriceSensor(Entitiy):
         self._state = None
         self._available = True
         self._icon = 'mdi:currency-usd'
-        self.attrs = {}
+        self.attributes = {}
         if name != '':
             self._unique_id = 'helium.price.'+name.lower()
             self._name = 'Price '+name
@@ -121,18 +122,23 @@ class PriceSensor(Entitiy):
 
     @property
     def extra_state_attributes(self):
-        return self._attrs
+        return self.attributes
+
+    @property
+    def should_poll(self):
+        return True
 
     async def async_update(self):
         try:
-            response = http_client(JUPITER_PRICE_URL+'?ids='+self.address)
+            response = await asyncio.to_thread(http_client,JUPITER_PRICE_URL+'?ids='+self.address)
+            print(response)
             if response.status_code != 200:
                 return
             
             json = response.json()
-            self._state = float(json.data[self.address].price)
+            self._state = float(json['data'][self.address]['price'])
+            self._available = True
 
-
-        except (ClientError):
+        except (requests.exceptions.RequestException):
             self._available = False
-            _LOGGER.exception("Error retrieving data from jupyter.")
+            _LOGGER.exception("Error retrieving data from jupiter.")
