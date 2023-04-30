@@ -1,0 +1,11 @@
+{
+  "codeowners": ["@enes-oerdek"],
+  "config_flow": false,
+  "dependencies": [],
+  "documentation": "https://github.com/enes-oerdek/home-assistant-helium-integration",
+  "domain": "helium-solana-integration",
+  "iot_class": "cloud_polling",
+  "name": "Helium Integration",
+  "requirements": [],
+  "version": "1.0.0"
+}
