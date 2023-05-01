@@ -1,12 +1,12 @@
 {
+  "domain": "helium_solana",
+  "name": "Helium Integration",
   "codeowners": ["@enes-oerdek"],
   "config_flow": false,
   "dependencies": [],
   "documentation": "https://github.com/enes-oerdek/home-assistant-helium-integration",
-  "domain": "helium_solana",
   "iot_class": "cloud_polling",
-  "name": "Helium Integration",
+  "issue_tracker": "https://github.com/enes-oerdek/Home-Assistant-Helium-Integration/issues",
   "requirements": ["requests>=2.26.0"],
-  "version": "1.0.3",
-  "issue_tracker": "https://github.com/enes-oerdek/Home-Assistant-Helium-Integration/issues"
+  "version": "1.0.3"
 }
