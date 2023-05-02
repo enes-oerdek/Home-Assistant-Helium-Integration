@@ -9,6 +9,8 @@ HOTSPOTTY_PRICES = "https://beta-api.hotspotty.net/api/v1/tokens/prices"
 HOTSPOTTY_HOTSPOT_INFO = "https://beta-api.hotspotty.net/api/v1/wallets/hotspots/"
 HOTSPOTTY_REWARDS = "https://beta-api.hotspotty.net/api/v1/hotspot/rewards/lifetime/11AbnisrSShDiscZxxsyKVEpAjFCWtytkpt1atmChBSECBgSrv6/"
 
+HOTSPOTTY_TOKEN = "kjhdi7yduhw279dh92e9udh29eyr237y"
+
 #NETWORK_STATS_URL = "https://explorer.helium.com/stats"
 JUPITER_PRICE_URL = "https://quote-api.jup.ag/v4/price" # ?ids=a,b,c,d
 EPOCH_INFO_URL = "https://hnt-explorer.herokuapp.com/v1/epoch/info"
