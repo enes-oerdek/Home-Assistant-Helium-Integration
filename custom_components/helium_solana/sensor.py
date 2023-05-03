@@ -40,6 +40,7 @@ from .const import (
     ADDRESS_MOBILE,
     ADDRESS_HNT,
     ADDRESS_SOLANA,
+    COINGECKO_PRICE_URL,
     JUPITER_PRICE_URL,
     CURRENCY_USD
 )
@@ -78,10 +79,10 @@ async def async_setup_platform(
     """Set up the sensor platform."""
 
     sensors = []
-    sensors.append(PriceSensor(ADDRESS_IOT, 'IOT'))
-    sensors.append(PriceSensor(ADDRESS_MOBILE, 'MOBILE'))
-    sensors.append(PriceSensor(ADDRESS_HNT, 'HNT'))
-    sensors.append(PriceSensor(ADDRESS_SOLANA, 'SOLANA'))
+    sensors.append(PriceSensor(ADDRESS_IOT, 'IOT', 'helium-iot'))
+    sensors.append(PriceSensor(ADDRESS_MOBILE, 'MOBILE', 'helium-mobile'))
+    sensors.append(PriceSensor(ADDRESS_HNT, 'HNT','helium'))
+    sensors.append(PriceSensor(ADDRESS_SOLANA, 'SOLANA', 'wrapped-solana'))
 
     prices = config.get(CONF_PRICES)
 
@@ -185,9 +186,10 @@ class HeliumStats(Entity):
 class PriceSensor(Entity):
     """Price Sensor for Solana tokens"""
 
-    def __init__(self, address, name = ""):
+    def __init__(self, address, name = "", symbol = ''):
         super().__init__()
         self.address = address
+        self.symbol = symbol
         self._state = None
         self._available = True
         self._icon = 'mdi:currency-usd'
@@ -233,18 +235,18 @@ class PriceSensor(Entity):
 
     async def async_update(self):
         try:
-            response = await asyncio.to_thread(http_client,JUPITER_PRICE_URL+'?ids='+self.address)
+            response = await asyncio.to_thread(http_client,COINGECKO_PRICE_URL+'?ids='+self.symbol+'&vs_currencies=usd')
             print(response)
             if response.status_code != 200:
                 return
             
             json = response.json()
-            price_data = json['data'][self.address]
-            self._state = float(price_data['price'])
-            self.attributes['id'] = price_data['id']
-            self.attributes['mintSymbol'] = price_data['mintSymbol']
-            self.attributes['vsToken'] = price_data['vsToken']
-            self.attributes['vsTokenSymbol'] = price_data['vsTokenSymbol']
+            price_data = json[self.symbol]
+            self._state = float(price_data['usd'])
+            #self.attributes['id'] = price_data['id']
+            #self.attributes['mintSymbol'] = price_data['mintSymbol']
+            #self.attributes['vsToken'] = price_data['vsToken']
+            #self.attributes['vsTokenSymbol'] = price_data['vsTokenSymbol']
             self._available = True
 
         except (requests.exceptions.RequestException):
