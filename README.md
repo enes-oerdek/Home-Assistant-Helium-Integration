@@ -47,13 +47,20 @@ Now you're all set to enjoy the benefits of Helium integration in your Home Assi
 Get ready to unlock the full potential of Helium integration in your Home Assistant with this simple configuration! :star:
 
 1. **Update your `configuration.yaml`** - Add the following code snippet to your `configuration.yaml` file:
-
 ```yaml
 sensor:
   - platform: helium_solana
 ```
 
-This one-liner will introduce new sensors for the prices of HNT, IOT, MOBILE, and SOL, providing you with valuable insights right at your fingertips! :gem:
+This one-liner will introduce new sensors for the prices of HNT, IOT, MOBILE, and SOL, providing you with valuable insights right at your fingertips! :gem: If you are interested in your wallet stats as well, you need to add some more lines.
+
+```yaml
+sensor:
+  - platform: helium_solana
+    wallets:
+    - [SOLANA WALLET ADDRESS HERE]
+```
+Replace [SOLANA WALLET ADDRESS HERE] with your Solana Wallet Address. You can find this address in the settings of the black Helium App > Copy Address > Solana.
 
 2. **Customize your dashboard** - Now that your sensors are set up, it's time to add them to your Home Assistant dashboard. Check out the examples below for inspiration and create a personalized display that suits your needs.
 
