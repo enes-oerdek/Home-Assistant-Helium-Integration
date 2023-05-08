@@ -52,7 +52,9 @@ sensor:
   - platform: helium_solana
 ```
 
-This one-liner will introduce new sensors for the prices of HNT, IOT, MOBILE, and SOL, providing you with valuable insights right at your fingertips! :gem: If you are interested in your wallet stats as well, you need to add some more lines.
+This one-liner will introduce new sensors for the prices of HNT, IOT, MOBILE, and SOL, providing you with valuable insights right at your fingertips! :gem:
+
+*Optional*: If you are interested in your wallet stats as well, you need to add the "wallets" part in your configuration as well.
 
 ```yaml
 sensor:
@@ -62,9 +64,9 @@ sensor:
 ```
 Replace [SOLANA WALLET ADDRESS HERE] with your Solana Wallet Address. You can find this address in the settings of the black Helium App > Copy Address > Solana.
 
-2. **Customize your dashboard** - Now that your sensors are set up, it's time to add them to your Home Assistant dashboard. Check out the examples below for inspiration and create a personalized display that suits your needs.
+3. **Customize your dashboard** - Now that your sensors are set up, it's time to add them to your Home Assistant dashboard. Check out the examples below for inspiration and create a personalized display that suits your needs.
 
-3. **Introduce Automations** - Stay ahead of the game by setting up automations to be notified of major price changes! :mega: Create an automation using the newly introduced price data, so you're always in the know when it comes to your investments.
+4. **Introduce Automations** - Stay ahead of the game by setting up automations to be notified of major price changes! :mega: Create an automation using the newly introduced price data, so you're always in the know when it comes to your investments.
 
 Your Home Assistant is now supercharged with Helium integration, giving you unparalleled control and insights into your smart home ecosystem! :tada:
 This will introduce new sensors with the prices of HNT, IOT, MOBILE and SOL. You can now add these sensors into your dashboard (see examples).
