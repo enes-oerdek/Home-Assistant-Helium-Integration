@@ -90,31 +90,32 @@ async def async_setup_platform(
         for price in prices:
             sensors.append(PriceSensor(price))
 
-    sensors.append(HeliumStats('IOT', 'total_hotspots', ['data', 'helium_iot', 'total_hotspots']))
-    sensors.append(HeliumStats('IOT', 'active_hotspots', ['data', 'helium_iot', 'active_hotspots']))
-    sensors.append(HeliumStats('IOT', 'total_cities', ['data', 'helium_iot', 'total_cities']))
-    sensors.append(HeliumStats('IOT', 'total_countries', ['data', 'helium_iot', 'total_countries']))
-    sensors.append(HeliumStats('IOT', 'daily_average_rewards', ['data', 'helium_iot', 'daily_average_rewards'], 'float'))
+    sensors.append(HeliumStats('IOT', 'total_hotspots', 'Total Hotspots', ['data', 'helium_iot', 'total_hotspots'], 'mdi:router-wireless', 'Hotspots'))
+    sensors.append(HeliumStats('IOT', 'active_hotspots', 'Active Hotspots',  ['data', 'helium_iot', 'active_hotspots'], 'mdi:router-wireless', 'Hotspots'))
+    sensors.append(HeliumStats('IOT', 'total_cities', 'Total Cities', ['data', 'helium_iot', 'total_cities'],'mdi:city', 'Cities'))
+    sensors.append(HeliumStats('IOT', 'total_countries', 'Total Countries', ['data', 'helium_iot', 'total_countries'], 'mdi:earth', 'Countries'))
+    sensors.append(HeliumStats('IOT', 'daily_average_rewards', 'Daily Average Rewards', ['data', 'helium_iot', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'IOT', 'float'))
 
-    sensors.append(HeliumStats('MOBILE', 'total_hotspots', ['data', 'helium_mobile', 'total_hotspots']))
-    sensors.append(HeliumStats('MOBILE', 'active_hotspots', ['data', 'helium_mobile', 'active_hotspots']))
-    sensors.append(HeliumStats('MOBILE', 'total_cities', ['data', 'helium_mobile', 'total_cities']))
-    sensors.append(HeliumStats('MOBILE', 'total_countries', ['data', 'helium_mobile', 'total_countries']))
-    sensors.append(HeliumStats('MOBILE', 'daily_average_rewards', ['data', 'helium_mobile', 'daily_average_rewards'], 'float'))
+    sensors.append(HeliumStats('MOBILE', 'total_hotspots', 'Total Hotspots', ['data', 'helium_mobile', 'total_hotspots'],'mdi:router-wireless', 'Hotspots'))
+    sensors.append(HeliumStats('MOBILE', 'active_hotspots', 'Active Hotspots', ['data', 'helium_mobile', 'active_hotspots'],'mdi:router-wireless', 'Hotspots'))
+    sensors.append(HeliumStats('MOBILE', 'total_cities', 'Total Cities', ['data', 'helium_mobile', 'total_cities'], 'mdi:city', 'Cities'))
+    sensors.append(HeliumStats('MOBILE', 'total_countries', 'Total Countries', ['data', 'helium_mobile', 'total_countries'], 'mdi:earth', 'Countries'))
+    sensors.append(HeliumStats('MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['data', 'helium_mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
 
     async_add_entities(sensors, update_before_add=True)
 
 class HeliumStats(Entity):
     """Helium Stats"""
-    def __init__(self, token, key, path, type='int'):
+    def __init__(self, token, key, name, path, icon, uom, type='int'):
         super().__init__()
         self.token = token
         self.key = key
         self.path = path
         self._available = True
-        self._icon = 'mdi:currency-usd'
+        self._icon = icon
         self._unique_id = 'helium.stats.'+token+'_'+key.lower()
-        self._name = 'Helium Stats '+token+' '+key
+        self._name = 'Helium Stats '+token+' '+name
+        self.uom = uom
         self.type = type
 
     @property
@@ -142,6 +143,10 @@ class HeliumStats(Entity):
         return True
 
     @property
+    def unit_of_measurement(self):
+        return self.uom
+
+    @property
     def device_info(self) -> DeviceInfo:
         """Return the device info."""
         return DeviceInfo(
@@ -149,8 +154,8 @@ class HeliumStats(Entity):
                 # Serial numbers are unique identifiers within a specific domain
                 (DOMAIN, self._unique_id)
             },
-            name='Helium Stat '+self.token+' '+self.key,
-            node_name='Helium Stat '+self.token+' '+self.key,
+            name='Helium Stat '+self.token+' '+self.name,
+            node_name='Helium Stat '+self.token+' '+self.name,
             manufacturer='Helium'
         )
 
@@ -168,12 +173,12 @@ class HeliumStats(Entity):
             for key in self.path:
                 value = value[key]
 
-            if self.type == 'int':
-                value = int(value)
+            if self.type == 'str':
+                value = str(value)
             elif self.type == 'float':
                 value = float(value)
             else:
-                value = str(value)
+                value = int(value)
             self._state = value
             self._available = True
 
