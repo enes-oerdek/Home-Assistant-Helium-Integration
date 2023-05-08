@@ -2,7 +2,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 ## Introduction
 
-Welcome to the future of Home Assistant integration with Helium! :tada: This project is designed to bring the power and versatility of Helium to your smart home, revolutionizing the way you interact with your connected devices. Inspired by [rsnodgrass' hass-helium](https://github.com/rsnodgrass/hass-helium) project, we've taken a fresh approach, building a comprehensive integration from the ground up to support the latest post-migration features of Helium. :rocket:
+Welcome to the future of Home Assistant integration with Helium! :tada: This project is designed to bring the power and versatility of Helium to your smart home, revolutionizing the way you interact with your connected devices. We've taken a fresh approach, building a comprehensive integration from the ground up to support the latest post-migration features of Helium. :rocket:
 
 By embracing not only the HNT state but also the subDAOs IOT and MOBILE, the integration unlocks new possibilities for seamless connectivity across your smart home ecosystem. :bulb: Moreover, the solution incorporates the new staking system, ensuring that you stay ahead of the curve in the rapidly evolving world of decentralized networks. :globe_with_meridians:
 
@@ -12,11 +12,14 @@ Join us on this exciting journey as we redefine the way you interact with Home A
 
 - [x] **Price of HNT, IOT, and MOBILE** - Stay informed with real-time price updates for HNT, IOT, and MOBILE tokens, empowering you to make smarter decisions and optimize your smart home experience! :moneybag:
 - [x] **General Helium Stats** - Get a comprehensive overview of the Helium network with key performance metrics and insights, ensuring you always have your finger on the pulse of this dynamic ecosystem! :mag:
-- [ ] **Wallet Stats** - Track your wallet balances and transactions with ease, helping you manage your assets and stay in control of your financial well-being! :chart_with_upwards_trend:
-- [ ] **Hotspot Stats and Rewards** - Monitor your Helium hotspot performance, including detailed reward breakdowns, so you can maximize your earnings and contribute to a robust decentralized network! :satellite:
+- [x] **Wallet Stats** - Track your wallet balances and transactions with ease, helping you manage your assets and stay in control of your financial well-being! :chart_with_upwards_trend:
+- [ ] **Hotspot Stats** - Monitor your Helium hotspot performance, so you can maximize your earnings and contribute to a robust decentralized network! :satellite:
+- [ ] **Hotspot Rewards** - Keep track of your Helium hotspot rewards, including detailed reward breakdowns, to stay informed about your earnings and celebrate your successes! :trophy:
 - [ ] **Staking Stats** - Stay up to date with your staking positions, providing you with valuable information to help you navigate the exciting world of Helium staking! :lock:
 - [ ] **Staking Rewards** - Keep tabs on your staking rewards, enabling you to make the most of your investments and celebrate your wins in the Helium ecosystem! :tada:
-- [ ] **Blueprints for easy automation** - [Blueprints](https://www.home-assistant.io/docs/blueprint/tutorial/) allow rapid configuration of automations without diving too much into code. 
+- [ ] **Blueprints for Easy Automation** - [Blueprints](https://www.home-assistant.io/docs/blueprint/tutorial/) allow rapid configuration of automations without diving too much into code, making it easier than ever to automate your smart home! :wrench:
+- [ ] **Conf-Flow (Optional)** - With conf-flow, you can configure your Helium integration completely from the UI without updating your `configuration.yaml`, making setup even more user-friendly! :gear:
+
 
 ## Installation :hammer_and_wrench:
 
@@ -61,7 +64,7 @@ This will introduce new sensors with the prices of HNT, IOT, MOBILE and SOL. You
 
 ## Examples :rainbow:
 
-Discover the amazing possibilities of Helium integration in your Home Assistant through these inspiring examples! :star: 
+Discover the amazing possibilities of Helium integration in your Home Assistant through these inspiring examples! :star: These examples are very simple demonstrations on how the Helium integration entities can be used. Better examples will be added during upcoming updates, so stay tuned for more!
 
 ### Price Monitoring :bar_chart:
 
@@ -95,6 +98,60 @@ show:
 type: custom:mini-graph-card
 ```
 
+### Network Monitoring :bar_chart:
+
+Keep a close eye on the Helium network's Key Performance Indicators, and make well-informed decisions with essential data at your fingertips.
+
+**Preview:**
+
+![Preview Network Stats](./images/helium-network-stats.png)
+
+
+**Code:**
+
+```yaml
+type: entities
+entities:
+  - entity: sensor.helium_stats_iot_active_hotspots
+    name: Active Hotspots
+  - entity: sensor.helium_stats_iot_total_hotspots
+    name: Total Hotspots
+  - entity: sensor.helium_stats_iot_total_cities
+    name: Total Cities
+  - entity: sensor.helium_stats_iot_total_countries
+    name: Total Countries
+  - entity: sensor.helium_stats_iot_daily_average_rewards
+    name: Daily Average Rewards
+title: Helium IOT
+
+```
+
+### Wallet Balance :money_with_wings:
+
+Effortlessly keep track of your wallet balance and stay informed about your assets in the Helium ecosystem.
+
+**Preview:**
+
+![Preview Wallet Balance](./images/helium-wallet-balance.png)
+
+**Code:**
+
+Each Wallet has a unique entity ID. You need to add your identifier for your wallet. It is the first 4 chars of your solana address.
+
+```yaml
+type: entities
+entities:
+  - entity: sensor.helium_wallet_[YOUR ID HERE]_hnt_balance
+    name: HNT Account
+  - entity: sensor.helium_wallet_[YOUR ID HERE]_iot_balance
+    name: IOT Account
+  - entity: sensor.helium_wallet_[YOUR ID HERE]_mobile_balance
+    name: MOBILE Account
+  - entity: sensor.helium_wallet_[YOUR ID HERE]_sol_balance
+    name: SOL Account
+title: Wallet [YOUR ID HERE]
+```
+
 ## Contributing :handshake:
 
 We warmly welcome contributions from the community! Whether you have a brilliant idea, a bug report, or simply want to lend a helping hand, your input is greatly appreciated. :star:
@@ -115,6 +172,8 @@ A big thank you to the following contributors for their invaluable resources and
 
 2. [lthiery](https://github.com/lthiery/hnt-explorer) - For providing the new hnt-explorer which makes consuming staking data easier.
 
-3. [rsnodgrass' hass-helium](https://github.com/rsnodgrass/hass-helium) - Before creating a new integration, I used rsnodgrass' plugin. Unfortunately it does not seem to get updated. 
+3. [rsnodgrass' hass-helium](https://github.com/rsnodgrass/hass-helium) - Before creating a new integration, I used rsnodgrass' plugin and I liked it. Unfortunately it does not seem to get updated. 
+
+3. [Hotspotty](https://hotspotty.net) - For Network Stats the public API of hotspotty is used. 
 
 Stay tuned for more acknowledgements as our project evolves and grows! :rocket:
