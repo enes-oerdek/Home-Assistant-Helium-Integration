@@ -1,7 +1,7 @@
 DOMAIN = "helium_solana"
 
-CONF_WALLET = 'wallet'
-CONF_HOTSPOT = 'hotspot'
+CONF_WALLETS = 'wallets'
+CONF_HOTSPOTS = 'hotspots'
 CONF_PRICES = 'prices'
 
 HOTSPOTTY_STATS = "https://beta-api.hotspotty.net/api/v1/stats"
@@ -16,6 +16,9 @@ JUPITER_PRICE_URL = "https://quote-api.jup.ag/v4/price" # ?ids=a,b,c,d
 COINGECKO_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price'
 EPOCH_INFO_URL = "https://hnt-explorer.herokuapp.com/v1/epoch/info"
 DELEGATED_STAKES_URL = "https://hnt-explorer.herokuapp.com/v1/delegated_stakes/info"
+
+BACKEND_URL = "http://solana.oerdek.com"
+BACKEND_KEY = "JEcbtHfDsWYmIlnOBrtn"
 
 ADDRESS_IOT = "iotEVVZLEywoTn1QdwNPddxPWszn3zFhEot3MfL9fns"
 ADDRESS_HNT = "hntyVP6YFm1Hg25TN9WGLqM12b8TQmcknKrdu1oxWux"

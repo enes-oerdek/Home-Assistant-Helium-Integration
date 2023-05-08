@@ -27,11 +27,14 @@ from homeassistant.helpers.device_registry import DeviceEntryType
 
 
 from .api.heliumstats import HeliumStatsAPI 
+from .api.backend import BackendAPI
+from .sensors.WalletBalance import WalletBalance
+
 
 from .const import (
     DOMAIN,
-    CONF_WALLET,
-    CONF_HOTSPOT,
+    CONF_WALLETS,
+    CONF_HOTSPOTS,
     CONF_PRICES,
     HOTSPOTTY_STATS,
     HOTSPOTTY_PRICES,
@@ -51,14 +54,14 @@ SCAN_INTERVAL = timedelta(minutes=10)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
-        vol.Optional(CONF_WALLET): [cv.string],
-        vol.Optional(CONF_HOTSPOT): [cv.string],
+        vol.Optional(CONF_WALLETS): [cv.string],
+        vol.Optional(CONF_HOTSPOTS): [cv.string],
         vol.Optional(CONF_PRICES): [cv.string],
     }
 )
 
 heliumStatsAPI = HeliumStatsAPI(HOTSPOTTY_STATS, HOTSPOTTY_TOKEN)
-
+backendAPI = BackendAPI()
 
 def http_client(url, payload=None, method='GET', headers=None):
     # Make the HTTP request with the given URL, payload, method, and headers
@@ -77,6 +80,7 @@ async def async_setup_platform(
     discovery_info: Optional[DiscoveryInfoType] = None,
 ) -> None:
     """Set up the sensor platform."""
+    wallets = config.get(CONF_WALLETS)
 
     sensors = []
     sensors.append(PriceSensor(ADDRESS_IOT, 'IOT', 'helium-iot'))
@@ -102,7 +106,17 @@ async def async_setup_platform(
     sensors.append(HeliumStats('MOBILE', 'total_countries', 'Total Countries', ['data', 'helium_mobile', 'total_countries'], 'mdi:earth', 'Countries'))
     sensors.append(HeliumStats('MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['data', 'helium_mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
 
+    for wallet in wallets:
+        if len(wallet) != 44:
+            continue
+        sensors.append(WalletBalance(backendAPI, wallet, 'hnt', ['balance', 'hnt'], 'HNT','mdi:wallet'))
+        sensors.append(WalletBalance(backendAPI, wallet, 'iot', ['balance', 'iot'], 'IOT','mdi:wallet'))
+        sensors.append(WalletBalance(backendAPI, wallet, 'sol', ['balance', 'solana'], 'SOL','mdi:wallet'))
+        sensors.append(WalletBalance(backendAPI, wallet, 'mobile', ['balance', 'mobile'], 'MOBILE','mdi:wallet'))
+
     async_add_entities(sensors, update_before_add=True)
+
+
 
 class HeliumStats(Entity):
     """Helium Stats"""
