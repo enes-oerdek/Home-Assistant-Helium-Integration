@@ -5,8 +5,7 @@ from ..const import BACKEND_URL, BACKEND_KEY
 
 class BackendAPI:
     def __init__(self, cache_ttl=600):
-        self._data = None
-        self._cache_time = 0
+        self._cache = {}
         self._cache_ttl = cache_ttl
 
     @staticmethod
@@ -20,11 +19,13 @@ class BackendAPI:
         # Return the response
         return response
 
-    async def get_data(self, path):
+    async def get_data(self, path, cache_key=None):
+        cache_key = cache_key or path  # Use the path as the cache key if no key is provided
         now = time.time()
-        if self._data is None or now - self._cache_time > self._cache_ttl:
+        cache_entry = self._cache.get(cache_key)
+        if cache_entry is None or now - cache_entry['time'] > self._cache_ttl:
             headers =  {'Authorization': 'bearer '+BACKEND_KEY }
             response = await asyncio.to_thread(self.http_client, path, None, 'GET', headers)
-            self._data = response
-            self._cache_time = now
-        return self._data
+            self._cache[cache_key] = {'data': response, 'time': now}
+
+        return self._cache[cache_key]['data']

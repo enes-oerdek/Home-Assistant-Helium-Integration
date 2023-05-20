@@ -25,6 +25,7 @@ from homeassistant.helpers.typing import (
 
 from homeassistant.helpers.device_registry import DeviceEntryType
 
+from .utility import http_client
 
 from .api.heliumstats import HeliumStatsAPI 
 from .api.backend import BackendAPI
@@ -34,20 +35,15 @@ from .sensors.HeliumStats import HeliumStats
 from .sensors.PriceSensor import PriceSensor
 
 from .const import (
-    DOMAIN,
     CONF_WALLETS,
     CONF_HOTSPOTS,
     CONF_PRICES,
     HOTSPOTTY_STATS,
-    HOTSPOTTY_PRICES,
     HOTSPOTTY_TOKEN,
     ADDRESS_IOT,
     ADDRESS_MOBILE,
     ADDRESS_HNT,
-    ADDRESS_SOLANA,
-    COINGECKO_PRICE_URL,
-    JUPITER_PRICE_URL,
-    CURRENCY_USD
+    ADDRESS_SOLANA
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -63,18 +59,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 heliumStatsAPI = HeliumStatsAPI(HOTSPOTTY_STATS, HOTSPOTTY_TOKEN)
-api_wallet = BackendAPI()
-api_rewards = BackendAPI()
-
-def http_client(url, payload=None, method='GET', headers=None):
-    # Make the HTTP request with the given URL, payload, method, and headers
-    response = requests.request(method, url, json=payload, headers=headers)
-
-    # Raise an exception if the response was not successful
-    response.raise_for_status()
-
-    # Return the response
-    return response
+api_backend = BackendAPI()
 
 async def async_setup_platform(
     hass: HomeAssistantType,
@@ -113,12 +98,30 @@ async def async_setup_platform(
         len_wallet = len(wallet)
         if len_wallet <32 or len_wallet > 44:
             continue
-        sensors.append(WalletBalance(api_wallet, wallet, 'hnt', ['balance', 'hnt'], 'HNT','mdi:wallet'))
-        sensors.append(WalletBalance(api_wallet, wallet, 'iot', ['balance', 'iot'], 'IOT','mdi:wallet'))
-        sensors.append(WalletBalance(api_wallet, wallet, 'sol', ['balance', 'solana'], 'SOL','mdi:wallet'))
-        sensors.append(WalletBalance(api_wallet, wallet, 'mobile', ['balance', 'mobile'], 'MOBILE','mdi:wallet'))
+        
+        sensors.append(WalletBalance(api_backend, wallet, 'hnt', ['balance', 'hnt'], 'HNT','mdi:wallet'))
+        sensors.append(WalletBalance(api_backend, wallet, 'iot', ['balance', 'iot'], 'IOT','mdi:wallet'))
+        sensors.append(WalletBalance(api_backend, wallet, 'sol', ['balance', 'solana'], 'SOL','mdi:wallet'))
+        sensors.append(WalletBalance(api_backend, wallet, 'mobile', ['balance', 'mobile'], 'MOBILE','mdi:wallet'))
 
-        #rewards = await api_rewards.get_data('hotspot-rewards2/'+str(wallet))
+        response = await api_backend.get_data('hotspot-rewards2/'+str(wallet))
+        if response.status_code == 200:
+            rewards = response.json()
+            #hotspots = len(rewards.rewards)
+            for hotspot_index in rewards['rewards']:
+                hotspot_name = rewards['rewards'][hotspot_index]['name']
+                hotspot_token = rewards['rewards'][hotspot_index]['token']
+                sensors.append(HotspotReward(api_backend, wallet, hotspot_name, ['rewards', hotspot_index, 'claimed_rewards'], 'Claimed Rewards' , hotspot_token, 'mdi:hand-coin-outline'))
+                sensors.append(HotspotReward(api_backend, wallet, hotspot_name, ['rewards', hotspot_index, 'unclaimed_rewards'], 'Unclaimed Rewards' , hotspot_token, 'mdi:hand-coin-outline'))
+                sensors.append(HotspotReward(api_backend, wallet, hotspot_name, ['rewards', hotspot_index, 'total_rewards'], 'Total Rewards' , hotspot_token, 'mdi:hand-coin-outline'))
+
+
+            for token in rewards['rewards_aggregated']:
+                sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'claimed_rewards'], 'Claimed Rewards' , token, 'mdi:hand-coin-outline'))
+                sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'unclaimed_rewards'], 'Unclaimed Rewards', token, 'mdi:hand-coin-outline'))
+                sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'total_rewards'], 'Total Rewards', token, 'mdi:hand-coin-outline'))
+
+
         #_LOGGER.info(rewards)
 
 

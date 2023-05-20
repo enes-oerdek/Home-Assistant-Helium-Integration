@@ -4,21 +4,26 @@ from homeassistant.helpers.entity import (
     DeviceInfo
 )
 import requests
+from ..utility import title_case_and_replace_hyphens
 
 
 class HotspotReward(Entity):
     """Hotspot Reward"""
-    def __init__(self, api, address, key, path, uom, icon):
+    def __init__(self, api, wallet, identifier, path, label, uom, icon):
         super().__init__()
         self.api = api
-        self.address = address
-        self.key = key
+        self.wallet = wallet
         self.path = path
+        self.identifier = identifier
         self._available = True
         self._icon = icon
-        self._unique_id = 'helium.hotspot-reward.'+address[:4]+'_'+key.lower()
-        self._name = 'Hotspot Rewards '+address[:4]+' '+uom+" Balance"
-        self.uom = uom
+        self._unique_id = 'helium.hotspot-reward.'+wallet[:4]+'_'+path[0]+"_"+path[1]+"_"+path[2]
+        if path[0] == 'rewards_aggregated':
+            self._name = 'Helium Wallet '+identifier[:4]+' '+label+" "+uom.upper()
+        elif path[0] == 'rewards':
+            self._name = 'Helium Hotspot '+title_case_and_replace_hyphens(identifier)+' '+label+" "+uom.upper()
+
+        self.uom = uom.upper()
 
     @property
     def name(self) -> str:
@@ -50,7 +55,7 @@ class HotspotReward(Entity):
 
     async def async_update(self):
         try:
-            response = await self.api.get_data('hotspot-rewards/'+str(self.address))
+            response = await self.api.get_data('hotspot-rewards2/'+str(self.wallet))
             if response.status_code != 200:
                 return
             
