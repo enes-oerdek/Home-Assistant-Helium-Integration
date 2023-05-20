@@ -14,7 +14,7 @@ Join us on this exciting journey as we redefine the way you interact with Home A
 - [x] **General Helium Stats** - Get a comprehensive overview of the Helium network with key performance metrics and insights, ensuring you always have your finger on the pulse of this dynamic ecosystem! :mag:
 - [x] **Wallet Stats** - Track your wallet balances and transactions with ease, helping you manage your assets and stay in control of your financial well-being! :chart_with_upwards_trend:
 - [ ] **Hotspot Stats** - Monitor your Helium hotspot performance, so you can maximize your earnings and contribute to a robust decentralized network! :satellite:
-- [ ] **Hotspot Rewards** - Keep track of your Helium hotspot rewards, including detailed reward breakdowns, to stay informed about your earnings and celebrate your successes! :trophy:
+- [x] **Hotspot Rewards** - Keep track of your Helium hotspot rewards, including detailed reward breakdowns, to stay informed about your earnings and celebrate your successes! :trophy:
 - [ ] **Staking Stats** - Stay up to date with your staking positions, providing you with valuable information to help you navigate the exciting world of Helium staking! :lock:
 - [ ] **Staking Rewards** - Keep tabs on your staking rewards, enabling you to make the most of your investments and celebrate your wins in the Helium ecosystem! :tada:
 - [ ] **Blueprints for Easy Automation** - [Blueprints](https://www.home-assistant.io/docs/blueprint/tutorial/) allow rapid configuration of automations without diving too much into code, making it easier than ever to automate your smart home! :wrench:
