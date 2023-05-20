@@ -6,8 +6,8 @@ from homeassistant.helpers.entity import (
 import requests
 
 
-class WalletBalance(Entity):
-    """Wallet Balance"""
+class HotspotReward(Entity):
+    """Hotspot Reward"""
     def __init__(self, api, address, key, path, uom, icon):
         super().__init__()
         self.api = api
@@ -16,8 +16,8 @@ class WalletBalance(Entity):
         self.path = path
         self._available = True
         self._icon = icon
-        self._unique_id = 'helium.wallet.'+address[:4]+'_'+key.lower()
-        self._name = 'Helium Wallet '+address[:4]+' '+uom+" Balance"
+        self._unique_id = 'helium.hotspot-reward.'+address[:4]+'_'+key.lower()
+        self._name = 'Hotspot Rewards '+address[:4]+' '+uom+" Balance"
         self.uom = uom
 
     @property
@@ -50,16 +50,15 @@ class WalletBalance(Entity):
 
     async def async_update(self):
         try:
-            response = await self.api.get_data('wallet/'+str(self.address))
+            response = await self.api.get_data('hotspot-rewards/'+str(self.address))
             if response.status_code != 200:
                 return
             
             value = response.json()
-            print(value)
             for key in self.path:
                 value = value[key]
-
-            value = round(float(value),2)
+            value = int(value)
+            value = round(value / (10 ** 6),2)
             self._state = value
             self._available = True
 

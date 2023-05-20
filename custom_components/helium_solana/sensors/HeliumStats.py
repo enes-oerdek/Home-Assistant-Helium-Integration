@@ -4,21 +4,25 @@ from homeassistant.helpers.entity import (
     DeviceInfo
 )
 import requests
+from ..const import (
+    DOMAIN
+)
 
 
-class WalletBalance(Entity):
-    """Wallet Balance"""
-    def __init__(self, api, address, key, path, uom, icon):
+class HeliumStats(Entity):
+    """Helium Stats"""
+    def __init__(self, api, token, key, name, path, icon, uom, type='int'):
         super().__init__()
         self.api = api
-        self.address = address
+        self.token = token
         self.key = key
         self.path = path
         self._available = True
         self._icon = icon
-        self._unique_id = 'helium.wallet.'+address[:4]+'_'+key.lower()
-        self._name = 'Helium Wallet '+address[:4]+' '+uom+" Balance"
+        self._unique_id = 'helium.stats.'+token+'_'+key.lower()
+        self._name = 'Helium Stats '+token+' '+name
         self.uom = uom
+        self.type = type
 
     @property
     def name(self) -> str:
@@ -48,21 +52,42 @@ class WalletBalance(Entity):
     def unit_of_measurement(self):
         return self.uom
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(
+            identifiers={
+                # Serial numbers are unique identifiers within a specific domain
+                (DOMAIN, self._unique_id)
+            },
+            name='Helium Stat '+self.token+' '+self.name,
+            node_name='Helium Stat '+self.token+' '+self.name,
+            manufacturer='Helium'
+        )
+
+    
     async def async_update(self):
         try:
-            response = await self.api.get_data('wallet/'+str(self.address))
+
+            
+            response = await self.api.get_data()
+
             if response.status_code != 200:
                 return
             
             value = response.json()
-            print(value)
             for key in self.path:
                 value = value[key]
 
-            value = round(float(value),2)
+            if self.type == 'str':
+                value = str(value)
+            elif self.type == 'float':
+                value = float(value)
+            else:
+                value = int(value)
             self._state = value
             self._available = True
 
         except (requests.exceptions.RequestException):
             self._available = False
-            _LOGGER.exception("Error retrieving wallet balance from backend")
+            _LOGGER.exception("Error retrieving helium stats from hotspotty")
