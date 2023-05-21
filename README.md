@@ -63,7 +63,14 @@ sensor:
     wallets:
     - [SOLANA WALLET ADDRESS HERE]
 ```
-Replace [SOLANA WALLET ADDRESS HERE] with your Solana Wallet Address. You can find this address in the settings of the black Helium App > Copy Address > Solana.
+Replace [SOLANA WALLET ADDRESS HERE] with your Solana Wallet Address (without brackets). You can find this address in the settings of the black Helium App > Copy Address > Solana. Your resulting configuraiton might look like this:
+```yaml
+sensor:
+  - platform: helium_solana
+    wallets:
+    - rAwOnpD26GH8FcEo1H4ng3MPPsN8C5KdZ7N7MqAS
+```
+
 
 3. **Customize your dashboard** - Now that your sensors are set up, it's time to add them to your Home Assistant dashboard. Check out the examples below for inspiration and create a personalized display that suits your needs.
 
