@@ -61,9 +61,9 @@ This one-liner will introduce new sensors for the prices of HNT, IOT, MOBILE, an
 sensor:
   - platform: helium_solana
     wallets:
-    - [SOLANA WALLET ADDRESS HERE]
+    - SOLANA WALLET ADDRESS HERE
 ```
-Replace [SOLANA WALLET ADDRESS HERE] with your Solana Wallet Address (without brackets). You can find this address in the settings of the black Helium App > Copy Address > Solana. Your resulting configuraiton might look like this:
+Replace "SOLANA WALLET ADDRESS HERE" with your Solana Wallet Address. You can find this address in the settings of the black Helium App > Copy Address > Solana. Your resulting configuraiton might look like this:
 ```yaml
 sensor:
   - platform: helium_solana
@@ -153,7 +153,7 @@ Effortlessly keep track of your wallet balance and stay informed about your asse
 
 **Code:**
 
-Each Wallet has a unique entity ID. You need to add your identifier for your wallet. It is the first 4 chars of your solana address.
+Each wallet has a unique entity ID. You need to add your identifier for your wallet. It is the first 4 chars of your solana address. Replace [YOUR ID HERE] (including brackets) with your wallet id.
 
 ```yaml
 type: entities
