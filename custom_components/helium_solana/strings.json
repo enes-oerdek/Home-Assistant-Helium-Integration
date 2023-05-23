@@ -1,0 +1,14 @@
+{
+    "title": "Helium Integration",
+    "config": {
+      "step": {
+          "user": {
+              "data": {
+                  "wallets": "Solana Wallet Address"
+              },
+              "title": "Solana Wallet Address",
+              "description": "You can find this address in your Helium App (black icon) > Settings > Copy Address > Solana."
+          }
+      }
+    }
+  }

@@ -19,7 +19,7 @@ Join us on this exciting journey as we redefine the way you interact with Home A
 - [ ] **Staking Rewards** - Keep tabs on your staking rewards, enabling you to make the most of your investments and celebrate your wins in the Helium ecosystem! :tada:
 - [ ] **Device Integration** - Seamlessly integrate devices from a Helium Console and jumpstart your IoT projects with ease. Experience the power of Helium in every device and transform your smart home experience! :electric_plug:
 - [ ] **Blueprints for Easy Automation** - [Blueprints](https://www.home-assistant.io/docs/blueprint/tutorial/) allow rapid configuration of automations without diving too much into code, making it easier than ever to automate your smart home! :wrench:
-- [ ] **Conf-Flow (Optional)** - With conf-flow, you can configure your Helium integration completely from the UI without updating your `configuration.yaml`, making setup even more user-friendly! :gear:
+- [x] **Conf-Flow** - With conf-flow, you can configure your Helium integration completely from the UI without updating your `configuration.yaml`, making setup even more user-friendly! :gear:
 
 
 ## Installation :hammer_and_wrench:

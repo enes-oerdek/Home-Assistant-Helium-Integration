@@ -9,6 +9,7 @@ from datetime import timedelta
 from typing import Any, Callable, Dict, Optional
 from urllib import parse
 
+from homeassistant import config_entries, core
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 import homeassistant.helpers.config_validation as cv
@@ -35,6 +36,8 @@ from .sensors.HeliumStats import HeliumStats
 from .sensors.PriceSensor import PriceSensor
 
 from .const import (
+    DOMAIN,
+    CONF_WALLET,
     CONF_WALLETS,
     CONF_HOTSPOTS,
     CONF_PRICES,
@@ -61,6 +64,18 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 heliumStatsAPI = HeliumStatsAPI(HOTSPOTTY_STATS, HOTSPOTTY_TOKEN)
 api_backend = BackendAPI()
 
+async def async_setup_entry(
+    hass: core.HomeAssistant,
+    config_entry: config_entries.ConfigEntry,
+    async_add_entities
+):
+    config = hass.data[DOMAIN][config_entry.entry_id]
+    wallet = config.get(CONF_WALLET)
+    #prices = config.get(CONF_PRICES)
+    sensors = await get_sensors([wallet], None)
+
+    async_add_entities(sensors, update_before_add=True)
+
 async def async_setup_platform(
     hass: HomeAssistantType,
     config: ConfigType,
@@ -69,14 +84,18 @@ async def async_setup_platform(
 ) -> None:
     """Set up the sensor platform."""
     wallets = config.get(CONF_WALLETS)
+    prices = config.get(CONF_PRICES)
+    sensors = await get_sensors(wallets, prices)
 
+    async_add_entities(sensors, update_before_add=True)
+
+async def get_sensors(wallets, prices):
     sensors = []
     sensors.append(PriceSensor(http_client, ADDRESS_IOT, 'IOT', 'helium-iot'))
     sensors.append(PriceSensor(http_client, ADDRESS_MOBILE, 'MOBILE', 'helium-mobile'))
     sensors.append(PriceSensor(http_client, ADDRESS_HNT, 'HNT','helium'))
     sensors.append(PriceSensor(http_client, ADDRESS_SOLANA, 'SOLANA', 'wrapped-solana'))
 
-    prices = config.get(CONF_PRICES)
 
     if prices:
         for price in prices:
@@ -128,4 +147,4 @@ async def async_setup_platform(
     #sensors.append(HotspotReward(backendAPI, wallet, 'iot', ['rewards', ADDRESS_IOT], 'IOT', 'mdi:hand-coin-outline'))
     #sensors.append(HotspotReward(backendAPI, wallet, 'mobile', ['rewards', ADDRESS_MOBILE], 'MOBILE', 'mdi:hand-coin-outline'))
 
-    async_add_entities(sensors, update_before_add=True)
+    return sensors
