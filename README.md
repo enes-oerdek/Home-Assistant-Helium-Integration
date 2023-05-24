@@ -45,7 +45,29 @@ Now you're all set to enjoy the benefits of Helium integration in your Home Assi
 
 ## Configuration :gear:
 
-Get ready to unlock the full potential of Helium integration in your Home Assistant with this simple configuration! :star:
+Unleash the full power of Helium integration in your Home Assistant by following these simple steps. :star:
+
+### Simple Configuration using Configuration Flow
+
+1. **Home Assistant Settings**: Begin by navigating to your Home Assistant settings. Then, select "Devices and Services".
+
+2. **Add Integration**: Look for the "+ Add Integration" button in the lower right corner, click it and search for "Helium".
+
+   ![Configuration Steps 1 and 2](./images/configuration0.png)
+
+3. **Configure Helium Integration**: You'll be prompted to enter the number of wallets you want to configure. If you only have one wallet, simply leave the default value. On the next screen, you'll need to enter your public address. This address can be found in the settings of the Helium Wallet App. Navigate to: Helium Wallet App (black) > Copy Address > Solana.
+
+   ![Configuration Step 3](./images/configuration1.png)
+
+   ![Configuration Step 4](./images/configuration2.png)
+
+4. **Restart Home Assistant**: After the sensors and devices have loaded, you may need to reload the integration to finalize the configuration.
+
+   ![Configuration Step 5](./images/configuration3.png)
+
+### Advanced Configuration using `configuration.yaml`
+
+The simple configuration method should suffice for most users. However, some beta features may only be accessible through the advanced configuration method.
 
 1. **Update your `configuration.yaml`** - Add the following code snippet to your `configuration.yaml` file:
 ```yaml
@@ -63,7 +85,7 @@ sensor:
     wallets:
     - SOLANA WALLET ADDRESS HERE
 ```
-Replace "SOLANA WALLET ADDRESS HERE" with your Solana Wallet Address. You can find this address in the settings of the black Helium App > Copy Address > Solana. Your resulting configuraiton might look like this:
+Replace "SOLANA WALLET ADDRESS HERE" with your Solana Wallet Address. You can find this address in the settings of the black Helium App > Copy Address > Solana. Your resulting configuration might look like this:
 ```yaml
 sensor:
   - platform: helium_solana
