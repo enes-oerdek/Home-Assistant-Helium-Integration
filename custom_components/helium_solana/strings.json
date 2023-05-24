@@ -11,7 +11,7 @@
         },
         "wallets": {
           "title": "Solana Wallet Address",
-          "description": "You can find this address in your Helium App (black icon) > Settings > Copy Address > Solana.",
+          "description": "You can find this address in your Helium App (black icon) > Settings > Copy Address > Solana. After successful setup, once reloading the integration or restarting Home Assistant is needed.",
           "data": {
             "wallet": "Enter single Solana Wallet Address"
           }
