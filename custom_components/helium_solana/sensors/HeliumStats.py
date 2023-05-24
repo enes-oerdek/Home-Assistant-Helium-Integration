@@ -20,6 +20,7 @@ class HeliumStats(Entity):
         self._available = True
         self._icon = icon
         self._unique_id = 'helium.stats.'+token+'_'+key.lower()
+        self.device_unique_id = 'helium.stats.'+token
         self._name = 'Helium Stats '+token+' '+name
         self.uom = uom
         self.type = type
@@ -58,10 +59,10 @@ class HeliumStats(Entity):
         return DeviceInfo(
             identifiers={
                 # Serial numbers are unique identifiers within a specific domain
-                (DOMAIN, self._unique_id)
+                (DOMAIN, self.device_unique_id)
             },
-            name='Helium Stat '+self.token+' '+self.name,
-            node_name='Helium Stat '+self.token+' '+self.name,
+            name='Helium Stats '+self.token,
+            node_name=self.name,
             manufacturer='Helium'
         )
 

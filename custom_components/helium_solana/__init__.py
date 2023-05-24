@@ -1,6 +1,7 @@
 from homeassistant import core, config_entries
 from .const import DOMAIN
 import logging
+import asyncio
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ async def async_setup_entry(
     hass.data.setdefault(DOMAIN, {})
     hass_data = dict(entry.data)
     hass.data[DOMAIN][entry.entry_id] = hass_data
-    _#LOGGER.exception(entry)
+    #_LOGGER.exception(entry)
     # Forward the setup to the sensor platform.
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "sensor")

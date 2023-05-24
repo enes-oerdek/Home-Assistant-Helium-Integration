@@ -2,6 +2,7 @@ DOMAIN = "helium_solana"
 
 CONF_WALLETS = 'wallets'
 CONF_WALLET = "wallet"
+CONF_WALLET_COUNT = "wallet_count"
 CONF_HOTSPOTS = 'hotspots'
 CONF_PRICES = 'prices'
 

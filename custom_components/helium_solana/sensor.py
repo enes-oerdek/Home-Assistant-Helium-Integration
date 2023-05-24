@@ -70,9 +70,8 @@ async def async_setup_entry(
     async_add_entities
 ):
     config = hass.data[DOMAIN][config_entry.entry_id]
-    wallet = config.get(CONF_WALLET)
-    #prices = config.get(CONF_PRICES)
-    sensors = await get_sensors([wallet], None)
+    wallets = config.get(CONF_WALLETS)
+    sensors = await get_sensors(wallets, None)
 
     async_add_entities(sensors, update_before_add=True)
 

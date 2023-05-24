@@ -5,7 +5,9 @@ from homeassistant.helpers.entity import (
 )
 import requests
 from ..utility import title_case_and_replace_hyphens
-
+from ..const import (
+    DOMAIN
+)
 
 class HotspotReward(Entity):
     """Hotspot Reward"""
@@ -18,12 +20,20 @@ class HotspotReward(Entity):
         self._available = True
         self._icon = icon
         self._unique_id = 'helium.hotspot-reward.'+wallet[:4]+'_'+path[0]+"_"+path[1]+"_"+path[2]
-        if path[0] == 'rewards_aggregated':
-            self._name = 'Helium Wallet '+identifier[:4]+' '+label+" "+uom.upper()
-        elif path[0] == 'rewards':
-            self._name = 'Helium Hotspot '+title_case_and_replace_hyphens(identifier)+' '+label+" "+uom.upper()
-
         self.uom = uom.upper()
+
+        if path[0] == 'rewards_aggregated':
+            self._name = 'Helium Hotspot Reward Wallet '+identifier[:4]+' '+label
+            self.device_unique_id = "helium.wallet.rewards."+identifier[:4]
+            self.device_name = "Helium Hotspot Reward Wallet "+identifier[:4]
+        elif path[0] == 'rewards':
+            title = title_case_and_replace_hyphens(identifier)
+            self._name = 'Helium Hotspot '+title+' '+label
+            self.device_unique_id = "helium.hotspot.rewards."+identifier
+            self.device_name = "Helium Hotspot "+title
+        
+        self.node_name = label
+
 
     @property
     def name(self) -> str:
@@ -52,6 +62,19 @@ class HotspotReward(Entity):
     @property
     def unit_of_measurement(self):
         return self.uom
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(
+            identifiers={
+                # Serial numbers are unique identifiers within a specific domain
+                (DOMAIN, self.device_unique_id)
+            },
+            name=self.device_name,
+            node_name=self.node_name,
+            manufacturer='Helium'
+        )
 
     async def async_update(self):
         try:

@@ -6,7 +6,8 @@ from homeassistant.helpers.entity import (
 import requests
 from ..const import (
     COINGECKO_PRICE_URL,
-    CURRENCY_USD
+    CURRENCY_USD,
+    DOMAIN
 )
 import asyncio
 
@@ -23,12 +24,16 @@ class PriceSensor(Entity):
         self._available = True
         self._icon = 'mdi:currency-usd'
         self.attributes = {}
+        self.device_unique_id = 'helium.price'
+        
         if name != '':
             self._unique_id = 'helium.price.'+name.lower()
             self._name = 'Helium Price '+name
+            self.node_name = name
         else:
             self._unique_id = 'helium.price.'+address
             self._name = 'Helium Price '+address
+            self.node_name = address
 
     @property
     def name(self) -> str:
@@ -62,6 +67,18 @@ class PriceSensor(Entity):
     def should_poll(self):
         return True
 
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(
+            identifiers={
+                # Serial numbers are unique identifiers within a specific domain
+                (DOMAIN, self.device_unique_id)
+            },
+            name='Helium Price',
+            node_name=self.node_name,
+            manufacturer='Helium'
+        )
     async def async_update(self):
         try:
             response = await asyncio.to_thread(self.api,COINGECKO_PRICE_URL+'?ids='+self.symbol+'&vs_currencies=usd')

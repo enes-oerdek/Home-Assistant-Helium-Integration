@@ -2,13 +2,20 @@
     "title": "Helium Integration",
     "config": {
       "step": {
-          "user": {
-              "data": {
-                  "wallets": "Solana Wallet Address"
-              },
-              "title": "Solana Wallet Address",
-              "description": "You can find this address in your Helium App (black icon) > Settings > Copy Address > Solana."
+        "user": {
+          "title": "Number of Wallets",
+          "description": "Please enter the number of wallets, you would like to add. In the next step, you will be asked about the wallet addresses one by one.",
+          "data": {
+            "wallet_count": "Number of Wallets"
           }
+        },
+        "wallets": {
+          "title": "Solana Wallet Address",
+          "description": "You can find this address in your Helium App (black icon) > Settings > Copy Address > Solana.",
+          "data": {
+            "wallet": "Enter single Solana Wallet Address"
+          }
+        }
       }
     }
   }

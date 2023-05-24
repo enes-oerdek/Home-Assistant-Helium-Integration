@@ -4,6 +4,9 @@ from homeassistant.helpers.entity import (
     DeviceInfo
 )
 import requests
+from ..const import (
+    DOMAIN
+)
 
 
 class WalletBalance(Entity):
@@ -19,6 +22,8 @@ class WalletBalance(Entity):
         self._unique_id = 'helium.wallet.'+address[:4]+'_'+key.lower()
         self._name = 'Helium Wallet '+address[:4]+' '+uom+" Balance"
         self.uom = uom
+        self.device_unique_id = 'helium.wallet.'+address[:4]
+        self.node_name = uom
 
     @property
     def name(self) -> str:
@@ -47,6 +52,19 @@ class WalletBalance(Entity):
     @property
     def unit_of_measurement(self):
         return self.uom
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+        return DeviceInfo(
+            identifiers={
+                # Serial numbers are unique identifiers within a specific domain
+                (DOMAIN, self.device_unique_id)
+            },
+            name='Helium Wallet '+self.address[:4],
+            node_name=self.node_name,
+            manufacturer='Helium'
+        )
 
     async def async_update(self):
         try:
