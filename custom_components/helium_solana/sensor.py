@@ -34,6 +34,9 @@ from .sensors.WalletBalance import WalletBalance
 from .sensors.HotspotReward import HotspotReward
 from .sensors.HeliumStats import HeliumStats
 from .sensors.PriceSensor import PriceSensor
+from .sensors.StakingRewardsPosition import StakingRewardsPosition
+from .sensors.StakingRewardsToken import StakingRewardsToken
+
 
 from .const import (
     DOMAIN,
@@ -138,6 +141,17 @@ async def get_sensors(wallets, prices):
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'claimed_rewards'], 'Claimed Rewards' , token, 'mdi:hand-coin-outline'))
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'unclaimed_rewards'], 'Unclaimed Rewards', token, 'mdi:hand-coin-outline'))
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'total_rewards'], 'Total Rewards', token, 'mdi:hand-coin-outline'))
+
+        response = await api_backend.get_data('staking-rewards/'+str(wallet))
+        if response.status_code == 200:
+            rewards = response.json()
+            for delegated_position_key in rewards['rewards']:
+                sensors.append(StakingRewardsPosition(api_backend, wallet, delegated_position_key, rewards['rewards'][delegated_position_key], 'mdi:hand-coin-outline'))
+                #pass
+            
+            for token in rewards['rewards_aggregated']:
+                sensors.append(StakingRewardsToken(api_backend, wallet, token, 'mdi:hand-coin-outline'))
+                #pass
 
 
         #_LOGGER.info(rewards)
