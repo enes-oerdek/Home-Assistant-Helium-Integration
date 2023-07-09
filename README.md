@@ -29,17 +29,14 @@ Follow these simple steps to get started.
 
 1. **Install the Home Assistant Community Store (HACS)** - Before you can use this integration, you'll need to have [HACS](https://github.com/hacs/integration) installed. Haven't set it up yet? No worries! Check out the [HACS installation guide](https://hacs.xyz/docs/installation/installation) to get up and running in no time.
 
-2. **Add Custom Repository** - As our plugin is still maturing and not yet available in the HACS store, you'll need to install it as a custom repository. Don't worry; it's a breeze! Simply follow these steps:
+2. **Install the Helium Integration from HACS** - Now that our plugin has matured and found its spot in the HACS store, installation is easier than ever! Follow these straightforward steps:
 
     - Navigate to HACS in your Home Assistant instance
     - Select "Integrations"
-    - Click the three dots in the top right corner and choose "Custom repositories"
-    - In the "Add custom repository" dialog, enter the following information:
-        - Repository: `enes-oerdek/Home-Assistant-Helium-Integration`
-        - Category: `Integration`
-    - Click "Add" and you're good to go!
+    - Use the repository browser to find `Helium Integration`
+    - Click on "Install this repository in HACS" button
 
-![Install Custom Repository](./images/install-custom-repository.png)
+You can also install the integration directly using this link: [Install Helium Integration](https://my.home-assistant.io/redirect/hacs_repository/?owner=enes-oerdek&repository=Home-Assistant-Helium-Integration&category=integration).
 
 Now you're all set to enjoy the benefits of Helium integration in your Home Assistant! :tada:
 
