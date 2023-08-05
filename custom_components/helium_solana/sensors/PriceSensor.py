@@ -11,6 +11,8 @@ from ..const import (
 )
 import asyncio
 
+import logging
+_LOGGER = logging.getLogger(__name__)
 
 class PriceSensor(Entity):
     """Price Sensor for Solana tokens"""

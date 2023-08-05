@@ -9,6 +9,9 @@ from ..const import (
     DOMAIN
 )
 
+import logging
+_LOGGER = logging.getLogger(__name__)
+
 class HotspotReward(Entity):
     """Hotspot Reward"""
     def __init__(self, api, wallet, identifier, path, label, uom, icon):

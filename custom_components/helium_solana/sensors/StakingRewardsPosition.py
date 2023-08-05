@@ -8,6 +8,9 @@ from ..const import (
     DOMAIN
 )
 
+import logging
+_LOGGER = logging.getLogger(__name__)
+
 class StakingRewardsPosition(Entity):
     """Staking Reward"""
     def __init__(self, api, wallet, delegated_position_key, data, icon):

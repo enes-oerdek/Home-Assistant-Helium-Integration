@@ -9,6 +9,9 @@ from ..const import (
 )
 
 
+import logging
+_LOGGER = logging.getLogger(__name__)
+
 class WalletBalance(Entity):
     """Wallet Balance"""
     def __init__(self, api, address, key, path, uom, icon):

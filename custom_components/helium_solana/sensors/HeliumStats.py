@@ -1,3 +1,4 @@
+
 from typing import Any, Callable, Dict, Optional
 from homeassistant.helpers.entity import (
     Entity,
@@ -7,6 +8,9 @@ import requests
 from ..const import (
     DOMAIN
 )
+
+import logging
+_LOGGER = logging.getLogger(__name__)
 
 
 class HeliumStats(Entity):
@@ -71,7 +75,7 @@ class HeliumStats(Entity):
         try:
 
             
-            response = await self.api.get_data()
+            response = await self.api.get_data('heliumstats')
 
             if response.status_code != 200:
                 return
