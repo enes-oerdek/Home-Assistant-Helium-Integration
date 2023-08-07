@@ -66,7 +66,7 @@ class HeliumStats(Entity):
                 (DOMAIN, self.device_unique_id)
             },
             name='Helium Stats '+self.token,
-            node_name=self.name,
+            #node_name=self._name,
             manufacturer='Helium'
         )
 

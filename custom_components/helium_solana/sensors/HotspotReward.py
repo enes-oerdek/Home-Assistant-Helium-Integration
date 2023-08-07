@@ -35,7 +35,7 @@ class HotspotReward(Entity):
             self.device_unique_id = "helium.hotspot.rewards."+identifier
             self.device_name = "Helium Hotspot "+title
         
-        self.node_name = label
+        #self.node_name = label
 
 
     @property
@@ -75,7 +75,7 @@ class HotspotReward(Entity):
                 (DOMAIN, self.device_unique_id)
             },
             name=self.device_name,
-            node_name=self.node_name,
+            #node_name=self.node_name,
             manufacturer='Helium'
         )
 

@@ -31,11 +31,11 @@ class PriceSensor(Entity):
         if name != '':
             self._unique_id = 'helium.price.'+name.lower()
             self._name = 'Helium Price '+name
-            self.node_name = name
+            #self.node_name = name
         else:
             self._unique_id = 'helium.price.'+address
             self._name = 'Helium Price '+address
-            self.node_name = address
+            #self.node_name = address
 
     @property
     def name(self) -> str:
@@ -78,13 +78,13 @@ class PriceSensor(Entity):
                 (DOMAIN, self.device_unique_id)
             },
             name='Helium Price',
-            node_name=self.node_name,
+            #node_name=self.node_name,
             manufacturer='Helium'
         )
     async def async_update(self):
         try:
             response = await asyncio.to_thread(self.api,COINGECKO_PRICE_URL+'?ids='+self.symbol+'&vs_currencies=usd')
-            print(response)
+            #print(response)
             if response.status_code != 200:
                 return
             

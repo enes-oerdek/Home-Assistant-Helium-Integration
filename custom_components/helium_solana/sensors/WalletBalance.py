@@ -26,7 +26,7 @@ class WalletBalance(Entity):
         self._name = 'Helium Wallet '+address[:4]+' '+uom+" Balance"
         self.uom = uom
         self.device_unique_id = 'helium.wallet.'+address[:4]
-        self.node_name = uom
+        #self.node_name = uom
 
     @property
     def name(self) -> str:
@@ -65,7 +65,7 @@ class WalletBalance(Entity):
                 (DOMAIN, self.device_unique_id)
             },
             name='Helium Wallet '+self.address[:4],
-            node_name=self.node_name,
+            #node_name=self.node_name,
             manufacturer='Helium'
         )
 
@@ -76,7 +76,7 @@ class WalletBalance(Entity):
                 return
             
             value = response.json()
-            print(value)
+            #print(value)
             for key in self.path:
                 value = value[key]
 
