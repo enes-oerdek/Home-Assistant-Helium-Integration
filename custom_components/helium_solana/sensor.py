@@ -28,7 +28,6 @@ from homeassistant.helpers.device_registry import DeviceEntryType
 
 from .utility import http_client
 
-from .api.heliumstats import HeliumStatsAPI 
 from .api.backend import BackendAPI
 from .sensors.WalletBalance import WalletBalance
 from .sensors.HotspotReward import HotspotReward
@@ -40,6 +39,8 @@ from .sensors.StakingRewardsToken import StakingRewardsToken
 
 from .const import (
     DOMAIN,
+    CONF_VERSION,
+    CONF_INTEGRATION,
     CONF_WALLET,
     CONF_WALLETS,
     CONF_HOTSPOTS,
@@ -64,7 +65,6 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     }
 )
 
-heliumStatsAPI = HeliumStatsAPI(HOTSPOTTY_STATS, HOTSPOTTY_TOKEN)
 api_backend = BackendAPI()
 
 async def async_setup_entry(
@@ -73,9 +73,19 @@ async def async_setup_entry(
     async_add_entities
 ):
     config = hass.data[DOMAIN][config_entry.entry_id]
-    wallets = config.get(CONF_WALLETS)
-    sensors = await get_sensors(wallets, None)
-
+    integration = config.get(CONF_INTEGRATION)
+    wallet = config.get(CONF_WALLET)
+    sensors = await get_sensors(integration, wallet, None)
+    
+    #version = config.get(CONF_VERSION)
+    #if version == 2:
+    #    integration = config.get(CONF_INTEGRATION)
+    #    wallet = config.get(CONF_WALLET)
+    #    sensors = await get_sensors(integration, wallet, None)
+    #elif version is None:
+    #    wallets = config.get(CONF_WALLETS)
+        #print(wallets)
+    #    sensors = await get_sensors_legacy(wallets, None)
     async_add_entities(sensors, update_before_add=True)
 
 async def async_setup_platform(
@@ -87,44 +97,44 @@ async def async_setup_platform(
     """Set up the sensor platform."""
     wallets = config.get(CONF_WALLETS)
     prices = config.get(CONF_PRICES)
-    sensors = await get_sensors(wallets, prices)
+    sensors = await get_sensors_legacy(wallets, prices)
 
     async_add_entities(sensors, update_before_add=True)
 
-async def get_sensors(wallets, prices):
+async def get_sensors(integration, wallet, prices):
     sensors = []
-    sensors.append(PriceSensor(http_client, ADDRESS_IOT, 'IOT', 'helium-iot'))
-    sensors.append(PriceSensor(http_client, ADDRESS_MOBILE, 'MOBILE', 'helium-mobile'))
-    sensors.append(PriceSensor(http_client, ADDRESS_HNT, 'HNT','helium'))
-    sensors.append(PriceSensor(http_client, ADDRESS_SOLANA, 'SOLANA', 'wrapped-solana'))
 
+    if integration == 'general_token_price':
+        sensors.append(PriceSensor(http_client, ADDRESS_IOT, 'IOT', 'helium-iot'))
+        sensors.append(PriceSensor(http_client, ADDRESS_MOBILE, 'MOBILE', 'helium-mobile'))
+        sensors.append(PriceSensor(http_client, ADDRESS_HNT, 'HNT','helium'))
+        sensors.append(PriceSensor(http_client, ADDRESS_SOLANA, 'SOLANA', 'wrapped-solana'))
 
-    if prices:
-        for price in prices:
-            sensors.append(PriceSensor(price))
+        if prices:
+            for price in prices:
+                sensors.append(PriceSensor(price))
 
-    sensors.append(HeliumStats(api_backend, 'IOT', 'total_hotspots', 'Total Hotspots', ['stats', 'iot', 'total_hotspots'], 'mdi:router-wireless', 'Hotspots'))
-    sensors.append(HeliumStats(api_backend, 'IOT', 'active_hotspots', 'Active Hotspots',  ['stats', 'iot', 'active_hotspots'], 'mdi:router-wireless', 'Hotspots'))
-    sensors.append(HeliumStats(api_backend, 'IOT', 'total_cities', 'Total Cities', ['stats', 'iot', 'total_cities'],'mdi:city', 'Cities'))
-    sensors.append(HeliumStats(api_backend, 'IOT', 'total_countries', 'Total Countries', ['stats', 'iot', 'total_countries'], 'mdi:earth', 'Countries'))
-    sensors.append(HeliumStats(api_backend, 'IOT', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'iot', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'IOT', 'float'))
+    if integration == 'general_stats':
+        sensors.append(HeliumStats(api_backend, 'IOT', 'total_hotspots', 'Total Hotspots', ['stats', 'iot', 'total_hotspots'], 'mdi:router-wireless', 'Hotspots'))
+        sensors.append(HeliumStats(api_backend, 'IOT', 'active_hotspots', 'Active Hotspots',  ['stats', 'iot', 'active_hotspots'], 'mdi:router-wireless', 'Hotspots'))
+        sensors.append(HeliumStats(api_backend, 'IOT', 'total_cities', 'Total Cities', ['stats', 'iot', 'total_cities'],'mdi:city', 'Cities'))
+        sensors.append(HeliumStats(api_backend, 'IOT', 'total_countries', 'Total Countries', ['stats', 'iot', 'total_countries'], 'mdi:earth', 'Countries'))
+        sensors.append(HeliumStats(api_backend, 'IOT', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'iot', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'IOT', 'float'))
 
-    sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_hotspots', 'Total Hotspots', ['stats', 'mobile', 'total_hotspots'],'mdi:router-wireless', 'Hotspots'))
-    sensors.append(HeliumStats(api_backend, 'MOBILE', 'active_hotspots', 'Active Hotspots', ['stats', 'mobile', 'active_hotspots'],'mdi:router-wireless', 'Hotspots'))
-    sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_cities', 'Total Cities', ['stats', 'mobile', 'total_cities'], 'mdi:city', 'Cities'))
-    sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_countries', 'Total Countries', ['stats', 'mobile', 'total_countries'], 'mdi:earth', 'Countries'))
-    sensors.append(HeliumStats(api_backend, 'MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
+        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_hotspots', 'Total Hotspots', ['stats', 'mobile', 'total_hotspots'],'mdi:router-wireless', 'Hotspots'))
+        sensors.append(HeliumStats(api_backend, 'MOBILE', 'active_hotspots', 'Active Hotspots', ['stats', 'mobile', 'active_hotspots'],'mdi:router-wireless', 'Hotspots'))
+        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_cities', 'Total Cities', ['stats', 'mobile', 'total_cities'], 'mdi:city', 'Cities'))
+        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_countries', 'Total Countries', ['stats', 'mobile', 'total_countries'], 'mdi:earth', 'Countries'))
+        sensors.append(HeliumStats(api_backend, 'MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
 
-    for wallet in wallets:
-        len_wallet = len(wallet)
-        if len_wallet <32 or len_wallet > 44:
-            continue
-        
+    if integration == 'wallet':
+    #if integration == 'wallet_balance':
         sensors.append(WalletBalance(api_backend, wallet, 'hnt', ['balance', 'hnt'], 'HNT','mdi:wallet'))
         sensors.append(WalletBalance(api_backend, wallet, 'iot', ['balance', 'iot'], 'IOT','mdi:wallet'))
         sensors.append(WalletBalance(api_backend, wallet, 'sol', ['balance', 'solana'], 'SOL','mdi:wallet'))
         sensors.append(WalletBalance(api_backend, wallet, 'mobile', ['balance', 'mobile'], 'MOBILE','mdi:wallet'))
 
+    #if integration == 'wallet_hotspots':
         response = await api_backend.get_data('hotspot-rewards2/'+str(wallet))
         if response.status_code == 200:
             rewards = response.json()
@@ -142,6 +152,7 @@ async def get_sensors(wallets, prices):
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'unclaimed_rewards'], 'Unclaimed Rewards', token, 'mdi:hand-coin-outline'))
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'total_rewards'], 'Total Rewards', token, 'mdi:hand-coin-outline'))
 
+    #if integration == 'wallet_staking':
         response = await api_backend.get_data('staking-rewards/'+str(wallet))
         if response.status_code == 200:
             rewards = response.json()
@@ -153,11 +164,22 @@ async def get_sensors(wallets, prices):
                 sensors.append(StakingRewardsToken(api_backend, wallet, token, 'mdi:hand-coin-outline'))
                 #pass
 
+    return sensors
 
-        #_LOGGER.info(rewards)
+async def get_sensors_legacy(wallets, prices):
+    sensors = []
+    sensors += await get_sensors('general_token_price', None, prices)
+    sensors += await get_sensors('general_stats', None, None)
 
 
-    #sensors.append(HotspotReward(backendAPI, wallet, 'iot', ['rewards', ADDRESS_IOT], 'IOT', 'mdi:hand-coin-outline'))
-    #sensors.append(HotspotReward(backendAPI, wallet, 'mobile', ['rewards', ADDRESS_MOBILE], 'MOBILE', 'mdi:hand-coin-outline'))
+    for wallet in wallets:
+        len_wallet = len(wallet)
+        if len_wallet <32 or len_wallet > 44:
+            continue
+        
+        sensors += await get_sensors('wallet', wallet, None)
+        #sensors += await get_sensors('wallet_balance', wallet, None)
+        #sensors += await get_sensors('wallet_hotspots', wallet, None)
+        #sensors += await get_sensors('wallet_staking', wallet, None)
 
     return sensors

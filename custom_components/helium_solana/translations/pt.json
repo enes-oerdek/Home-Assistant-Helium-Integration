@@ -2,11 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Numero de carteiras",
-        "description": "Por Favor insira o número de carteiras, que deseja adicionar. No próximo passo irá ser pedido o endereço um de cada vez.",
-        "data": {
-          "wallet_count": "Número de Carteiras"
-        }
+        "title": "Selecionar Integração",
+        "description": "Por favor, selecione a integração que deseja adicionar."
       },
       "wallets": {
         "title": "Endreço da Carteira Solana",

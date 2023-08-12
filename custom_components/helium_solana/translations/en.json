@@ -2,13 +2,10 @@
   "config": {
     "step": {
       "user": {
-        "title": "Number of Wallets",
-        "description": "Please enter the number of wallets, you would like to add. In the next step, you will be asked about the wallet addresses one by one.",
-        "data": {
-          "wallet_count": "Number of Wallets"
-        }
+        "title": "Select Integration",
+        "description": "Please select the integration you want to add."
       },
-      "wallets": {
+      "wallet": {
         "title": "Solana Wallet Address",
         "description": "You can find this address in your Helium App (black icon) > Settings > Copy Address > Solana. After successful setup, once reloading the integration or restarting Home Assistant is needed.",
         "data": {

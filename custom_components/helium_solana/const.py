@@ -1,11 +1,24 @@
 DOMAIN = "helium_solana"
-
+CONF_VERSION = 'version'
+CONF_TITLE = 'title'
 CONF_WALLETS = 'wallets'
 CONF_WALLET = "wallet"
 CONF_WALLET_COUNT = "wallet_count"
 CONF_HOTSPOTS = 'hotspots'
 CONF_PRICES = 'prices'
-
+CONF_INTEGRATION = "integration"
+CONF_INTEGRATION_VALUES = {
+    'general_stats': 'General Helium Stats', 
+    'general_token_price': 'Token Prices',
+    'wallet' : 'Wallet',
+    #'wallet_balance': 'Wallet Balance',
+    #'wallet_staking': 'Wallet Staking',
+    #'wallet_hotspots': 'Wallet Hotspots',
+    
+    # 'governance_hnt': 'Governance HNT',
+    # 'iot_device': 'IOT Device (Helium Console)'
+    # 'hotspot_rewards': 'Specific Hotspot Rewards'
+}
 HOTSPOTTY_STATS = "https://beta-api.hotspotty.net/api/v1/stats"
 HOTSPOTTY_PRICES = "https://beta-api.hotspotty.net/api/v1/tokens/prices"
 HOTSPOTTY_HOTSPOT_INFO = "https://beta-api.hotspotty.net/api/v1/wallets/hotspots/"

@@ -1,9 +1,33 @@
 from homeassistant import core, config_entries
-from .const import DOMAIN
+from .const import DOMAIN, CONF_VERSION, CONF_WALLET, CONF_WALLETS, CONF_WALLET_COUNT, CONF_INTEGRATION, CONF_INTEGRATION_VALUES
 import logging
 import asyncio
 
 _LOGGER = logging.getLogger(__name__)
+
+
+# Example migration function
+async def async_migrate_entry(hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry):
+    """Migrate old entry."""
+    _LOGGER.debug("Migrating from version %s", config_entry.version)
+
+    if config_entry.version == 1:
+
+        new = {**config_entry.data}
+        # TODO: modify Config Entry data
+        new[CONF_INTEGRATION] = 'wallet'
+        new[CONF_WALLET] = new[CONF_WALLETS][0]
+        new[CONF_VERSION] = 2
+        del new[CONF_WALLETS]
+        del new[CONF_WALLET_COUNT]
+
+        config_entry.version = 2
+        config_entry.title = 'Wallet (Migrated) '+new[CONF_WALLET][0:4]
+        hass.config_entries.async_update_entry(config_entry, data=new)
+
+    _LOGGER.info("Migration to version %s successful", config_entry.version)
+
+    return True
 
 async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
     """Set up the GitHub Custom component from yaml configuration."""
