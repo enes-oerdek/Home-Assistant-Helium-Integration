@@ -128,15 +128,20 @@ async def get_sensors(integration, wallet, prices):
         sensors.append(HeliumStats(api_backend, 'MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
 
     if integration == 'wallet':
+        
     #if integration == 'wallet_balance':
         sensors.append(WalletBalance(api_backend, wallet, 'hnt', ['balance', 'hnt'], 'HNT','mdi:wallet'))
         sensors.append(WalletBalance(api_backend, wallet, 'iot', ['balance', 'iot'], 'IOT','mdi:wallet'))
         sensors.append(WalletBalance(api_backend, wallet, 'sol', ['balance', 'solana'], 'SOL','mdi:wallet'))
         sensors.append(WalletBalance(api_backend, wallet, 'mobile', ['balance', 'mobile'], 'MOBILE','mdi:wallet'))
-
     #if integration == 'wallet_hotspots':
-        response = await api_backend.get_data('hotspot-rewards2/'+str(wallet))
-        if response.status_code == 200:
+        response = None
+        try:
+            response = await api_backend.get_data('hotspot-rewards2/'+str(wallet))
+        except:
+            _LOGGER.exception("No hotspot rewards found")
+        
+        if response and response.status_code == 200:
             rewards = response.json()
             #hotspots = len(rewards.rewards)
             for hotspot_index in rewards['rewards']:
@@ -146,14 +151,19 @@ async def get_sensors(integration, wallet, prices):
                 sensors.append(HotspotReward(api_backend, wallet, hotspot_name, ['rewards', hotspot_index, 'unclaimed_rewards'], 'Unclaimed Rewards' , hotspot_token, 'mdi:hand-coin-outline'))
                 sensors.append(HotspotReward(api_backend, wallet, hotspot_name, ['rewards', hotspot_index, 'total_rewards'], 'Total Rewards' , hotspot_token, 'mdi:hand-coin-outline'))
 
-
             for token in rewards['rewards_aggregated']:
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'claimed_rewards'], 'Claimed Rewards' , token, 'mdi:hand-coin-outline'))
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'unclaimed_rewards'], 'Unclaimed Rewards', token, 'mdi:hand-coin-outline'))
                 sensors.append(HotspotReward(api_backend, wallet, wallet, ['rewards_aggregated', token, 'total_rewards'], 'Total Rewards', token, 'mdi:hand-coin-outline'))
 
+
     #if integration == 'wallet_staking':
-        response = await api_backend.get_data('staking-rewards/'+str(wallet))
+        response = None
+        try:
+            response = await api_backend.get_data('staking-rewards/'+str(wallet))
+        except:
+            _LOGGER.exception("No staking rewards found")
+        
         if response.status_code == 200:
             rewards = response.json()
             for delegated_position_key in rewards['rewards']:
