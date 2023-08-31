@@ -31,7 +31,6 @@ class HeliumStats(CoordinatorEntity[HeliumSolanaDataUpdateCoordinator], SensorEn
         self.path = path
         self.device_unique_id = "helium.stats." + token
 
-        # self._attr_available = True
         self._attr_device_info = DeviceInfo(
             identifiers={
                 # Serial numbers are unique identifiers within a specific domain
