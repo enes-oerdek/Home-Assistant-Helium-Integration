@@ -29,6 +29,7 @@ from homeassistant.helpers.device_registry import DeviceEntryType
 from .utility import http_client
 
 from .api.backend import BackendAPI
+from .coordinator import HeliumSolanaDataUpdateCoordinator
 from .sensors.WalletBalance import WalletBalance
 from .sensors.HotspotReward import HotspotReward
 from .sensors.HeliumStats import HeliumStats
@@ -75,7 +76,7 @@ async def async_setup_entry(
     config = hass.data[DOMAIN][config_entry.entry_id]
     integration = config.get(CONF_INTEGRATION)
     wallet = config.get(CONF_WALLET)
-    sensors = await get_sensors(integration, wallet, None)
+    sensors = await get_sensors(integration, wallet, None, hass)
     
     #version = config.get(CONF_VERSION)
     #if version == 2:
@@ -101,7 +102,7 @@ async def async_setup_platform(
 
     async_add_entities(sensors, update_before_add=True)
 
-async def get_sensors(integration, wallet, prices):
+async def get_sensors(integration, wallet, prices, hass):
     sensors = []
 
     if integration == 'general_token_price':
@@ -115,17 +116,20 @@ async def get_sensors(integration, wallet, prices):
                 sensors.append(PriceSensor(price))
 
     if integration == 'general_stats':
-        sensors.append(HeliumStats(api_backend, 'IOT', 'total_hotspots', 'Total Hotspots', ['stats', 'iot', 'total_hotspots'], 'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'active_hotspots', 'Active Hotspots',  ['stats', 'iot', 'active_hotspots'], 'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'total_cities', 'Total Cities', ['stats', 'iot', 'total_cities'],'mdi:city', 'Cities'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'total_countries', 'Total Countries', ['stats', 'iot', 'total_countries'], 'mdi:earth', 'Countries'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'iot', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'IOT', 'float'))
+        coordinator = HeliumSolanaDataUpdateCoordinator(hass, api_backend)
+        await coordinator.async_config_entry_first_refresh()
 
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_hotspots', 'Total Hotspots', ['stats', 'mobile', 'total_hotspots'],'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'active_hotspots', 'Active Hotspots', ['stats', 'mobile', 'active_hotspots'],'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_cities', 'Total Cities', ['stats', 'mobile', 'total_cities'], 'mdi:city', 'Cities'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_countries', 'Total Countries', ['stats', 'mobile', 'total_countries'], 'mdi:earth', 'Countries'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
+        sensors.append(HeliumStats(coordinator, 'IOT', 'total_hotspots', 'Total Hotspots', ['stats', 'iot', 'total_hotspots'], 'mdi:router-wireless'))
+        sensors.append(HeliumStats(coordinator, 'IOT', 'active_hotspots', 'Active Hotspots',  ['stats', 'iot', 'active_hotspots'], 'mdi:router-wireless'))
+        sensors.append(HeliumStats(coordinator, 'IOT', 'total_cities', 'Total Cities', ['stats', 'iot', 'total_cities'],'mdi:city'))
+        sensors.append(HeliumStats(coordinator, 'IOT', 'total_countries', 'Total Countries', ['stats', 'iot', 'total_countries'], 'mdi:earth'))
+        sensors.append(HeliumStats(coordinator, 'IOT', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'iot', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'IOT', 'float'))
+
+        sensors.append(HeliumStats(coordinator, 'MOBILE', 'total_hotspots', 'Total Hotspots', ['stats', 'mobile', 'total_hotspots'],'mdi:router-wireless'))
+        sensors.append(HeliumStats(coordinator, 'MOBILE', 'active_hotspots', 'Active Hotspots', ['stats', 'mobile', 'active_hotspots'],'mdi:router-wireless'))
+        sensors.append(HeliumStats(coordinator, 'MOBILE', 'total_cities', 'Total Cities', ['stats', 'mobile', 'total_cities'], 'mdi:city'))
+        sensors.append(HeliumStats(coordinator, 'MOBILE', 'total_countries', 'Total Countries', ['stats', 'mobile', 'total_countries'], 'mdi:earth'))
+        sensors.append(HeliumStats(coordinator, 'MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
 
     if integration == 'wallet':
         
