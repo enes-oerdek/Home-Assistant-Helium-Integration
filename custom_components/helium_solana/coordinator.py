@@ -12,7 +12,7 @@ from .api.backend import BackendAPI
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
-UPDATE_INTERVAL = timedelta(minutes=1)
+UPDATE_INTERVAL = timedelta(minutes=30)
 
 
 class HeliumSolanaDataUpdateCoordinator(DataUpdateCoordinator[dict]):
