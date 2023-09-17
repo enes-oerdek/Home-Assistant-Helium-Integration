@@ -214,6 +214,4 @@ A big thank you to the following contributors for their invaluable resources and
 
 3. [rsnodgrass' hass-helium](https://github.com/rsnodgrass/hass-helium) - Before creating a new integration, I used rsnodgrass' plugin and I liked it. Unfortunately it does not seem to get updated. 
 
-3. [Hotspotty](https://hotspotty.net) - For Network Stats the public API of hotspotty is used. 
-
 Stay tuned for more acknowledgements as our project evolves and grows! :rocket:
