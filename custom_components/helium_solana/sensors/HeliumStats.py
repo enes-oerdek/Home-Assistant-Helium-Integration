@@ -15,9 +15,10 @@ _LOGGER = logging.getLogger(__name__)
 
 class HeliumStats(Entity):
     """Helium Stats"""
-    def __init__(self, api, token, key, name, path, icon, uom, type='int'):
+    def __init__(self, api, api_entity, token, key, name, path, icon, uom, type='int'):
         super().__init__()
         self.api = api
+        self.api_entity = api_entity
         self.token = token
         self.key = key
         self.path = path
@@ -75,7 +76,7 @@ class HeliumStats(Entity):
         try:
 
             
-            response = await self.api.get_data('heliumstats')
+            response = await self.api.get_data(self.api_entity)
 
             if response.status_code != 200:
                 return
@@ -95,4 +96,4 @@ class HeliumStats(Entity):
 
         except (requests.exceptions.RequestException):
             self._available = False
-            _LOGGER.exception("Error retrieving helium stats from hotspotty")
+            _LOGGER.exception("Error retrieving helium stats from backend")

@@ -17,11 +17,10 @@ from homeassistant.helpers.entity import (
     Entity,
     DeviceInfo
 )
-
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import (
     ConfigType,
-    DiscoveryInfoType,
-    HomeAssistantType,
+    DiscoveryInfoType
 )
 
 from homeassistant.helpers.device_registry import DeviceEntryType
@@ -89,7 +88,7 @@ async def async_setup_entry(
     async_add_entities(sensors, update_before_add=True)
 
 async def async_setup_platform(
-    hass: HomeAssistantType,
+    hass: HomeAssistant,
     config: ConfigType,
     async_add_entities: Callable,
     discovery_info: Optional[DiscoveryInfoType] = None,
@@ -115,18 +114,250 @@ async def get_sensors(integration, wallet, prices):
                 sensors.append(PriceSensor(price))
 
     if integration == 'general_stats':
-        sensors.append(HeliumStats(api_backend, 'IOT', 'total_hotspots', 'Total Hotspots', ['stats', 'iot', 'total_hotspots'], 'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'active_hotspots', 'Active Hotspots',  ['stats', 'iot', 'active_hotspots'], 'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'total_cities', 'Total Cities', ['stats', 'iot', 'total_cities'],'mdi:city', 'Cities'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'total_countries', 'Total Countries', ['stats', 'iot', 'total_countries'], 'mdi:earth', 'Countries'))
-        sensors.append(HeliumStats(api_backend, 'IOT', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'iot', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'IOT', 'float'))
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "IOT",
+                "total_hotspots",
+                "Total Hotspots",
+                ["stats", "iot", "total_hotspots"],
+                "mdi:router-wireless",
+                "Hotspots",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "IOT",
+                "active_hotspots",
+                "Active Hotspots",
+                ["stats", "iot", "active_hotspots"],
+                "mdi:router-wireless",
+                "Hotspots",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "IOT",
+                "total_cities",
+                "Total Cities",
+                ["stats", "iot", "total_cities"],
+                "mdi:city",
+                "Cities",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "IOT",
+                "total_countries",
+                "Total Countries",
+                ["stats", "iot", "total_countries"],
+                "mdi:earth",
+                "Countries",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "IOT",
+                "daily_average_rewards",
+                "Daily Average Rewards",
+                ["stats", "iot", "daily_average_rewards"],
+                "mdi:hand-coin-outline",
+                "IOT",
+                "float",
+            )
+        )
 
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_hotspots', 'Total Hotspots', ['stats', 'mobile', 'total_hotspots'],'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'active_hotspots', 'Active Hotspots', ['stats', 'mobile', 'active_hotspots'],'mdi:router-wireless', 'Hotspots'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_cities', 'Total Cities', ['stats', 'mobile', 'total_cities'], 'mdi:city', 'Cities'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'total_countries', 'Total Countries', ['stats', 'mobile', 'total_countries'], 'mdi:earth', 'Countries'))
-        sensors.append(HeliumStats(api_backend, 'MOBILE', 'daily_average_rewards', 'Daily Average Rewards', ['stats', 'mobile', 'daily_average_rewards'], 'mdi:hand-coin-outline', 'MOBILE' ,'float'))
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "MOBILE",
+                "total_hotspots",
+                "Total Hotspots",
+                ["stats", "mobile", "total_hotspots"],
+                "mdi:router-wireless",
+                "Hotspots",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "MOBILE",
+                "active_hotspots",
+                "Active Hotspots",
+                ["stats", "mobile", "active_hotspots"],
+                "mdi:router-wireless",
+                "Hotspots",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "MOBILE",
+                "total_cities",
+                "Total Cities",
+                ["stats", "mobile", "total_cities"],
+                "mdi:city",
+                "Cities",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "MOBILE",
+                "total_countries",
+                "Total Countries",
+                ["stats", "mobile", "total_countries"],
+                "mdi:earth",
+                "Countries",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "heliumstats",
+                "MOBILE",
+                "daily_average_rewards",
+                "Daily Average Rewards",
+                ["stats", "mobile", "daily_average_rewards"],
+                "mdi:hand-coin-outline",
+                "MOBILE",
+                "float",
+            )
+        )
 
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "HNT",
+                "epoch",
+                "Epoch",
+                ["epoch"],
+                "mdi:hand-coin-outline",
+                "Epoch",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "IOT",
+                "dc_burned",
+                "DC burned",
+                ["iot_dc_burned"],
+                "mdi:hand-coin-outline",
+                "IOT",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "IOT",
+                "delegation_rewards",
+                "Delegation Rewards",
+                ["iot_delegation_rewards_issued"],
+                "mdi:hand-coin-outline",
+                "IOT",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "IOT",
+                "utility_score",
+                "Utility Score",
+                ["iot_utility_score"],
+                "mdi:hand-coin-outline",
+                "Score",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "IOT",
+                "vehnt",
+                "VeHNT",
+                ["iot_vehnt_at_epoch_start"],
+                "mdi:hand-coin-outline",
+                "VeHNT",
+                "float",
+            )
+        )
+
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "MOBILE",
+                "dc_burned",
+                "DC burned",
+                ["mobile_dc_burned"],
+                "mdi:hand-coin-outline",
+                "MOBILE",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "MOBILE",
+                "delegation_rewards",
+                "Delegation Rewards",
+                ["mobile_delegation_rewards_issued"],
+                "mdi:hand-coin-outline",
+                "MOBILE",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "MOBILE",
+                "utility_score",
+                "Utility Score",
+                ["mobile_utility_score"],
+                "mdi:hand-coin-outline",
+                "Score",
+                "int",
+            )
+        )
+        sensors.append(
+            HeliumStats(
+                api_backend,
+                "epochinfo",
+                "MOBILE",
+                "vehnt",
+                "VeHNT",
+                ["mobile_vehnt_at_epoch_start"],
+                "mdi:hand-coin-outline",
+                "VeHNT",
+                "float",
+            )
+        )
+
+        
     if integration == 'wallet':
         
     #if integration == 'wallet_balance':
